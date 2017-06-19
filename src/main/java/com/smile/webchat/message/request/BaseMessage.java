@@ -6,7 +6,7 @@
 * @date: 2017年6月19日 下午3:17:00
 *
 */
-package com.smile.webchat.message;
+package com.smile.webchat.message.request;
 
 /**
 * @ClassName: BaseMessage

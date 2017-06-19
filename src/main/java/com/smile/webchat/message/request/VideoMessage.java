@@ -6,7 +6,7 @@
 * @date: 2017年6月19日 下午3:24:28
 *
 */
-package com.smile.webchat.message;
+package com.smile.webchat.message.request;
 
 /**
 * @ClassName: VideoMessage
