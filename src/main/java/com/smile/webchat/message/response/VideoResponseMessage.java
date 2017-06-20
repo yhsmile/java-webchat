@@ -17,4 +17,14 @@ package com.smile.webchat.message.response;
 */
 public class VideoResponseMessage extends BaseResponseMessage {
 
+	// สำฦต
+    private Video Video;
+
+    public Video getVideo() {
+        return Video;
+    }
+
+    public void setVideo(Video video) {
+        Video = video;
+    }
 }
