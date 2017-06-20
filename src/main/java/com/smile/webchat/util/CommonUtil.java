@@ -28,6 +28,7 @@ import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
 import com.smile.webchat.menu.Menu;
 import com.smile.webchat.model.Token;
+import com.smile.webchat.model.WeixinUserInfo;
 
 /**
 * @ClassName: CommonUtil
@@ -173,10 +174,70 @@ public class CommonUtil {
         return result;
     }
 	
+	/**
+	 * 
+	* @Title: getUserInfo
+	* @author: 杨辉
+	* @Description: 获取用户信息
+	* @param accessToken
+	* @param openId
+	* @return    
+	* @return WeixinUserInfo    
+	* @throws
+	 */
+	public static WeixinUserInfo getUserInfo(String accessToken, String openId) {
+        WeixinUserInfo weixinUserInfo = null;
+        // 拼接请求地址
+        String requestUrl = "https://api.weixin.qq.com/cgi-bin/user/info?access_token=ACCESS_TOKEN&openid=OPENID";
+        
+        requestUrl = requestUrl.replace("ACCESS_TOKEN", accessToken).replace("OPENID", openId);
+        // 获取用户信息
+        JSONObject jsonObject = CommonUtil.httpsRequest(requestUrl, "GET", null);
+
+        if (null != jsonObject) {
+            try {
+                weixinUserInfo = new WeixinUserInfo();
+                // 用户的标识
+                weixinUserInfo.setOpenId(jsonObject.getString("openid"));
+                // 关注状态（1是关注，0是未关注），未关注时获取不到其余信息
+                weixinUserInfo.setSubscribe(jsonObject.getIntValue("subscribe"));
+                // 用户关注时间
+                weixinUserInfo.setSubscribeTime(jsonObject.getString("subscribe_time"));
+                // 昵称
+                weixinUserInfo.setNickname(jsonObject.getString("nickname"));
+                // 用户的性别（1是男性，2是女性，0是未知）
+                weixinUserInfo.setSex(jsonObject.getIntValue("sex"));
+                // 用户所在国家
+                weixinUserInfo.setCountry(jsonObject.getString("country"));
+                // 用户所在省份
+                weixinUserInfo.setProvince(jsonObject.getString("province"));
+                // 用户所在城市
+                weixinUserInfo.setCity(jsonObject.getString("city"));
+                // 用户的语言，简体中文为zh_CN
+                weixinUserInfo.setLanguage(jsonObject.getString("language"));
+                // 用户头像
+                weixinUserInfo.setHeadImgUrl(jsonObject.getString("headimgurl"));
+            } catch (Exception e) {
+                if (0 == weixinUserInfo.getSubscribe()) {
+                    log.error("用户{}已取消关注", weixinUserInfo.getOpenId());
+                } else {
+                    int errorCode = jsonObject.getIntValue("errcode");
+                    String errorMsg = jsonObject.getString("errmsg");
+                    log.error("获取用户信息失败 errcode:{} errmsg:{}", errorCode, errorMsg);
+                }
+            }
+        }
+        return weixinUserInfo;
+    }
+	
 	
 	public static void main(String[] args) {
 		Token token = getToken("wx638d3d4293105e85", "d4624c36b6795d1d99dcf0547af5443d");
 		System.out.println(token.toString());
+		
+		
+		WeixinUserInfo userInfo = getUserInfo(token.getAccessToken(),"o6hXFvgAXg5AfrybI_MXQKIfCqv0");
+		log.info(userInfo.toString());
 	}
 
 }

@@ -22,12 +22,13 @@ import com.smile.webchat.util.CommonUtil;
 * 
 */
 public class MenuManager {
+	
 
 	private static Logger log = LoggerFactory.getLogger(MenuManager.class);
 
     public static void main(String[] args) {
         // 第三方用户唯一凭证
-        String appId = "wx638d3d4293105e85";
+    	String appId = "wx638d3d4293105e85";
         // 第三方用户唯一凭证密钥
         String appSecret = "d4624c36b6795d1d99dcf0547af5443d";
 
