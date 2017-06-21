@@ -8,6 +8,15 @@
 */
 package com.smile.webchat.util;
 
+import java.io.UnsupportedEncodingException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
+
+import javax.servlet.http.HttpServletRequest;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,6 +37,18 @@ public class AdvancedUtil {
 
 	private static Logger log = LoggerFactory.getLogger(AdvancedUtil.class);
 	
+	/**
+	 * 
+	* @Title: getOauth2AccessToken
+	* @author: 杨辉
+	* @Description: 获取网页授权
+	* @param appId
+	* @param appSecret
+	* @param code
+	* @return    
+	* @return WeixinOauth2Token    
+	* @throws
+	 */
 	public static WeixinOauth2Token getOauth2AccessToken(String appId, String appSecret, String code) {
         WeixinOauth2Token wat = null;
         // 拼接请求地址
@@ -56,7 +77,17 @@ public class AdvancedUtil {
     }
 	
 	
-	
+	/**
+	 * 
+	* @Title: getSNSUserInfo
+	* @author: 杨辉
+	* @Description: 网页授权获取用户信息
+	* @param accessToken
+	* @param openId
+	* @return    
+	* @return SNSUserInfo    
+	* @throws
+	 */
 	public static SNSUserInfo getSNSUserInfo(String accessToken, String openId) {
         SNSUserInfo snsUserInfo = null;
         // 拼接请求地址
@@ -95,7 +126,67 @@ public class AdvancedUtil {
         return snsUserInfo;
     }
 	
-	
+	/**
+	 * 
+	* @Title: getWxConfig
+	* @author: 杨辉
+	* @Description: 获取微信的配置信息
+	* @param request
+	* @return    
+	* @return Map<String,Object>    
+	* @throws
+	 */
+	public static Map<String, Object> getWxConfig(HttpServletRequest request) {
+        Map<String, Object> ret = new HashMap<String, Object>();
+      
+        String appId = "wx638d3d4293105e85"; // 必填，公众号的唯一标识
+        String secret = "d4624c36b6795d1d99dcf0547af5443d";
+
+        //注意：此处的URL地址，必须为你访问页面的地址
+        String requestUrl = "http://1m74216j69.51mypc.cn/webchat/share.html";
+        String access_token = "";
+        String jsapi_ticket = "";
+        String timestamp = Long.toString(System.currentTimeMillis() / 1000); // 必填，生成签名的时间戳
+        String nonceStr = UUID.randomUUID().toString(); // 必填，生成签名的随机串
+        
+        log.info("nonceStr:" + nonceStr + ",timestamp:" +timestamp);
+        
+        String url = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid="+ appId + "&secret=" + secret;
+        
+        JSONObject json = CommonUtil.httpsRequest(url, "GET", null);
+        
+        if (json != null) {
+            //要注意，access_token需要缓存
+            access_token = json.getString("access_token");
+            
+            
+            url = "https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token="+ access_token + "&type=jsapi";
+            json = CommonUtil.httpsRequest(url, "GET", null);
+            if (json != null) {
+                jsapi_ticket = json.getString("ticket");
+                log.info("票据：" + jsapi_ticket);
+            }
+        }
+        String signature = "";
+        // 注意这里参数名必须全部小写，且必须有序
+        String sign = "jsapi_ticket=" + jsapi_ticket + "&noncestr=" + nonceStr+ "&timestamp=" + timestamp + "&url=" + requestUrl;
+        log.info("sign字符串：" + sign);
+        
+        try {
+    		//将拼接好的字符串进行加密
+    		byte[] digest = SignUtil.digestSHA1(sign);
+			signature = SignUtil.byteToStr(digest);
+			log.info("签名：" + signature);
+        	
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        ret.put("appId", appId);
+        ret.put("timestamp", timestamp);
+        ret.put("nonceStr", nonceStr);
+        ret.put("signature", signature);
+        return ret;
+    }
 	
 	public static void main(String[] args) {
 		Token token = CommonUtil.getToken("", "");

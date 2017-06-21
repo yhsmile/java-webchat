@@ -39,5 +39,10 @@ public class WeixinController {
 		
 		return "userinfo";
 	}
+	
+	@RequestMapping(value = "/share")
+	public String share(){
+		return "share";
+	}
 
 }
