@@ -8,8 +8,6 @@
 */
 package com.smile.webchat.util;
 
-import java.io.UnsupportedEncodingException;
-import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.Map;
@@ -143,7 +141,7 @@ public class AdvancedUtil {
         String secret = "d4624c36b6795d1d99dcf0547af5443d";
 
         //注意：此处的URL地址，必须为你访问页面的地址
-        String requestUrl = "http://1m74216j69.51mypc.cn/webchat/share.html";
+        String requestUrl = "http://1m74216j69.51mypc.cn/webchat/image.html";
         String access_token = "";
         String jsapi_ticket = "";
         String timestamp = Long.toString(System.currentTimeMillis() / 1000); // 必填，生成签名的时间戳

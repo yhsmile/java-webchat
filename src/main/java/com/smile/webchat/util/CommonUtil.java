@@ -10,11 +10,14 @@ package com.smile.webchat.util;
 
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.ConnectException;
 import java.net.URL;
+import java.util.Date;
 
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
@@ -231,13 +234,80 @@ public class CommonUtil {
     }
 	
 	
-	public static void main(String[] args) {
+	
+	public static void getWeiXinImage(String mediaId){
 		Token token = getToken("wx638d3d4293105e85", "d4624c36b6795d1d99dcf0547af5443d");
-		System.out.println(token.toString());
+		String requestUrl = "https://api.weixin.qq.com/cgi-bin/media/get?access_token=" + token.getAccessToken() + "&media_id=" + mediaId;
+		
+		try {
+            // 创建SSLContext对象，并使用我们指定的信任管理器初始化
+            TrustManager[] tm = { new MyX509TrustManager() };
+            SSLContext sslContext = SSLContext.getInstance("SSL", "SunJSSE");
+            sslContext.init(null, tm, new java.security.SecureRandom());
+            // 从上述SSLContext对象中得到SSLSocketFactory对象
+            SSLSocketFactory ssf = sslContext.getSocketFactory();
+
+            URL url = new URL(requestUrl);
+            HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
+            conn.setSSLSocketFactory(ssf);
+            
+            conn.setDoOutput(true);
+            conn.setDoInput(true);
+            conn.setUseCaches(false);
+            // 设置请求方式（GET/POST）
+            conn.setRequestMethod("GET");
+
+            // 从输入流读取返回内容
+            InputStream inputStream = conn.getInputStream();
+            
+            FileOutputStream fileOutputStream = null;
+            
+            String path = "E:\\weixin\\";
+            Date date = new Date();
+            String fileName = date.getTime()+".jpg";
+            File dir = new File(path);
+            if(!dir.exists()){
+            	dir.mkdirs();
+            }
+            path = path + fileName;
+            fileOutputStream = new FileOutputStream(path);
+            byte[] bytes = new byte[1024];
+            int len = 0;
+            while ((len = inputStream.read(bytes)) != -1) {
+                fileOutputStream.write(bytes, 0, len);
+            }
+            fileOutputStream.flush();
+            // 释放资源
+            inputStream.close();
+            inputStream = null;
+            fileOutputStream.close();
+            fileOutputStream = null;
+            conn.disconnect();
+        } catch (ConnectException ce) {
+            log.error("连接超时：{}", ce);
+        } catch (Exception e) {
+            log.error("https请求异常：{}", e);
+        }
 		
 		
-		WeixinUserInfo userInfo = getUserInfo(token.getAccessToken(),"o6hXFvgAXg5AfrybI_MXQKIfCqv0");
-		log.info(userInfo.toString());
+		
+		
+		log.info("获取图片");
+		
+		
+	}
+	
+	
+	public static void main(String[] args) {
+//		Token token = getToken("wx638d3d4293105e85", "d4624c36b6795d1d99dcf0547af5443d");
+//		System.out.println(token.toString());
+//		
+//		
+//		WeixinUserInfo userInfo = getUserInfo(token.getAccessToken(),"o6hXFvgAXg5AfrybI_MXQKIfCqv0");
+//		log.info(userInfo.toString());
+		
+		
+		getWeiXinImage("");
 	}
 
 }

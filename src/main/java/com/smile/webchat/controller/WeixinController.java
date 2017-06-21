@@ -4,10 +4,12 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.smile.webchat.model.SNSUserInfo;
 import com.smile.webchat.model.WeixinOauth2Token;
 import com.smile.webchat.util.AdvancedUtil;
+import com.smile.webchat.util.CommonUtil;
 
 @Controller
 @RequestMapping(value = "/webchat")
@@ -44,5 +46,16 @@ public class WeixinController {
 	public String share(){
 		return "share";
 	}
+	
+	@RequestMapping(value = "/image")
+	public String image(){
+		return "image";
+	}
 
+	@RequestMapping(value = "/local")
+	@ResponseBody
+	public String local(String mediaId){
+		CommonUtil.getWeiXinImage(mediaId);
+		return "";
+	}
 }

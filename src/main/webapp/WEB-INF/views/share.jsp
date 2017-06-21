@@ -38,7 +38,16 @@ wx.ready(function(){
     wx.onMenuShareTimeline({
         title: '第八篇 ：微信公众平台开发实战Java版之如何网页授权获取用户基本信息', // 分享标题
         link:"http://1m74216j69.51mypc.cn/webchat/share.html",
-        imgUrl: "http://1m74216j69.51mypc.cn/static/images/4.jpg" // 分享图标
+        imgUrl: "http://1m74216j69.51mypc.cn/static/images/4.jpg", // 分享图标
+        success:function(){
+        	 // 用户确认分享后执行的回调函数
+        	 alert("分享成功");
+        	 console.log("分享成功");
+        },
+        cancel: function () { 
+            // 用户取消分享后执行的回调函数
+        	 alert("取消分享"); 
+        }
     });
     
     // 获取“分享给朋友”按钮点击状态及自定义分享内容接口
@@ -48,6 +57,12 @@ wx.ready(function(){
         link:"http://1m74216j69.51mypc.cn/webchat/share.html",
         imgUrl: "http://1m74216j69.51mypc.cn/static/images/5.jpg", // 分享图标
         type: 'link', // 分享类型,music、video或link，不填默认为link
+        success: function () { 
+            // 用户确认分享后执行的回调函数
+        },
+        cancel: function () { 
+            // 用户取消分享后执行的回调函数
+        }
     });
     
     //获取“分享到QQ”按钮点击状态及自定义分享内容接口
@@ -91,13 +106,11 @@ wx.ready(function(){
             // 用户取消分享后执行的回调函数
         }
     });
-    
 });
 
 wx.error(function(res){
 	alert('wx.error: '+JSON.stringify(res));
 });
-
 </script>
 
 </head>
