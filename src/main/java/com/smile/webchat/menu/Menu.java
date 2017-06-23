@@ -17,7 +17,15 @@ package com.smile.webchat.menu;
 */
 public class Menu {
 
+	/**
+	 * 菜单按钮
+	 */
 	private Button[] button;
+	
+	/**
+	 * 个性化菜单匹配规则
+	 */
+	private Matchrule matchrule;
 
     public Button[] getButton() {
         return button;
@@ -26,4 +34,14 @@ public class Menu {
     public void setButton(Button[] button) {
         this.button = button;
     }
+
+	public Matchrule getMatchrule() {
+		return matchrule;
+	}
+
+	public void setMatchrule(Matchrule matchrule) {
+		this.matchrule = matchrule;
+	}
+    
+    
 }

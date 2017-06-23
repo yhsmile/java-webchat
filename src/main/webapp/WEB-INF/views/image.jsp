@@ -1,18 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8" import="java.util.*,com.smile.webchat.util.AdvancedUtil"%>
+    pageEncoding="UTF-8"%>
 <%
 		String path = request.getContextPath();
 		String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path;
 		request.getSession().setAttribute("path",  path);
 		request.getSession().setAttribute("basePath",  basePath);
 
-
-        Map<String,Object>  ret = new HashMap<String,Object> ();
-        ret=AdvancedUtil.getWxConfig(request);
-        request.setAttribute("appId", ret.get("appId"));
-        request.setAttribute("timestamp", ret.get("timestamp"));
-        request.setAttribute("nonceStr", ret.get("nonceStr"));
-        request.setAttribute("signature", ret.get("signature"));
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -75,6 +68,7 @@
 			          success: function (res) {
 			            i++;
 			            alert('已上传：' + i + '/' + length + ",serverId:" + res.serverId);
+			            $("#serverId").html(res.serverId);
 			            images.serverId.push(res.serverId);
 			            if (i < length) {
 			              upload();
@@ -151,6 +145,9 @@ wx.error(function(res){
 		<button id="downloadImage">下载图片</button>
 		<button id="localImage">本地图片</button>
 		
+	</div>
+	<div>
+		<span id="serverId"></span>
 	</div>
 	<div id="imageList"></div>
 </body>

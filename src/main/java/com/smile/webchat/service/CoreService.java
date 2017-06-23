@@ -13,7 +13,11 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.smile.webchat.message.response.Image;
+import com.smile.webchat.message.response.ImageResponseMessage;
 import com.smile.webchat.message.response.TextResponseMessage;
+import com.smile.webchat.message.response.Voice;
+import com.smile.webchat.message.response.VoiceResponseMessage;
 import com.smile.webchat.util.MessageUtil;
 
 /**
@@ -59,6 +63,18 @@ public class CoreService {
             // 图片消息
             else if (msgType.equals(MessageUtil.REQ_MESSAGE_TYPE_IMAGE)) {
                 respContent = "您发送的是图片消息！";
+                
+                ImageResponseMessage message = new ImageResponseMessage();
+                message.setCreateTime(new Date().getTime());
+                message.setFromUserName(toUserName);
+                message.setToUserName(fromUserName);
+                message.setMsgType(MessageUtil.RESP_MESSAGE_TYPE_IMAGE);
+                Image image = new Image();
+                image.setMediaId("DLN8G9-InHCBWac_qZ8zOBnzB57dCO6o4WGzJaP_4TrknyNSR9K46CdJCE08fzwF");
+                message.setImage(image);
+                
+                respXml = MessageUtil.messageToXml(message);
+                return respXml;
             }
             // 语音消息
             else if (msgType.equals(MessageUtil.REQ_MESSAGE_TYPE_VOICE)) {
@@ -103,6 +119,54 @@ public class CoreService {
                 // 自定义菜单
                 else if (eventType.equals(MessageUtil.EVENT_TYPE_CLICK)) {
                     // TODO 处理菜单点击事件
+                	
+                	// 事件KEY值，与创建自定义菜单时指定的KEY值对应  
+                    String eventKey = requestMap.get("EventKey");  
+                    
+                    //自定义菜单：联系我
+                    if (eventKey.equals("33")){
+                    	StringBuilder sb = new StringBuilder();
+                    	sb.append("联系QQ：735308529").append("\n");
+                    	sb.append("联系电话：18217547896");
+                    	respContent = sb.toString();
+                    }
+                    
+                    if(eventKey.equals("21")){
+                    	//文本消息
+                    	respContent = "我喜欢HelloKitty，你喜欢什么？";
+                    	
+                    }else if(eventKey.equals("22")){
+                    	//图片消息
+                    	ImageResponseMessage message = new ImageResponseMessage();
+                        message.setCreateTime(new Date().getTime());
+                        message.setFromUserName(toUserName);
+                        message.setToUserName(fromUserName);
+                        message.setMsgType(MessageUtil.RESP_MESSAGE_TYPE_IMAGE);
+                        Image image = new Image();
+                        image.setMediaId("yxfgmExnWqf9PxKMeK5Hah9bfp6czM8Y5kxUGDJfemE");
+                        message.setImage(image);
+                        respXml = MessageUtil.messageToXml(message);
+                    	
+                    }else if(eventKey.equals("23")){
+                    	//语音消息
+                    	VoiceResponseMessage message = new VoiceResponseMessage();
+                    	message.setCreateTime(new Date().getTime());
+                        message.setFromUserName(toUserName);
+                        message.setToUserName(fromUserName);
+                        message.setMsgType(MessageUtil.RESP_MESSAGE_TYPE_VOICE);
+                        Voice voice = new Voice();
+                        voice.setMediaId("");
+                        message.setVoice(voice);
+                        respXml = MessageUtil.messageToXml(message);
+                    	
+                    }else if(eventKey.equals("24")){
+                    	//视频消息
+                    	
+                    }else if(eventKey.equals("25")){
+                    	
+                    }else if(eventKey.equals("31")){
+                    	
+                    }
                 }
             }
             // 设置文本消息的内容

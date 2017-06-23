@@ -41,7 +41,7 @@ public class UrlEncodeUtil {
 	
 	
 	public static void main(String[] args) {
-		String url = urlEncodeUTF8("http://1m74216j69.51mypc.cn/oauthServlet");
+		String url = urlEncodeUTF8("http://1m74216j69.51mypc.cn/webchat/hyl.html");
 		System.out.println(url);
 	}
 

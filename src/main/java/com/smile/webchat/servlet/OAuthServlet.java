@@ -9,6 +9,7 @@
 package com.smile.webchat.servlet;
 
 import java.io.IOException;
+import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -17,7 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.smile.webchat.model.SNSUserInfo;
 import com.smile.webchat.model.WeixinOauth2Token;
-import com.smile.webchat.util.AdvancedUtil;
+import com.smile.webchat.util.WeixinWebOAuthUtil;
 
 /**
 * @ClassName: OAuthServlet
@@ -45,13 +46,13 @@ public class OAuthServlet extends HttpServlet {
         // 用户同意授权
         if (!"authdeny".equals(code)) {
             // 获取网页授权access_token
-            WeixinOauth2Token weixinOauth2Token = AdvancedUtil.getOauth2AccessToken("wx638d3d4293105e85", "d4624c36b6795d1d99dcf0547af5443d", code);
+            WeixinOauth2Token weixinOauth2Token = WeixinWebOAuthUtil.getOauth2AccessToken("wx638d3d4293105e85", "d4624c36b6795d1d99dcf0547af5443d", code);
             // 网页授权接口访问凭证
             String accessToken = weixinOauth2Token.getAccessToken();
             // 用户标识
             String openId = weixinOauth2Token.getOpenId();
             // 获取用户信息
-            SNSUserInfo snsUserInfo = AdvancedUtil.getSNSUserInfo(accessToken, openId);
+            SNSUserInfo snsUserInfo = WeixinWebOAuthUtil.getSNSUserInfo(accessToken, openId);
 
             // 设置要传递的参数
             request.setAttribute("snsUserInfo", snsUserInfo);
