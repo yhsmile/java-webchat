@@ -7,6 +7,7 @@ https://mp.weixin.qq.com/debug/cgi-bin/sandbox?t=jsapisign
 #微信学习参考地址
 http://www.cnblogs.com/liuhongfeng/p/4846260.html
 http://blog.csdn.net/lyq8479/article/details/8937622
+http://blog.csdn.net/lyq8479/article/category/1366622
 
 
 https://my.oschina.net/superkangning/blog/367484
