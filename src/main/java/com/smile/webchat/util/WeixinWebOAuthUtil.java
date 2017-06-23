@@ -70,9 +70,9 @@ public class WeixinWebOAuthUtil {
 	 * 
 	* @Title: refreshToken
 	* @author: 杨辉
-	* @Description: 刷新网页授权 access_token
+	* @Description: 刷新网页授权 access_token。refresh_token有效期为30天。
 	* @param appid
-	* @param refreshToken
+	* @param refreshToken 获取access_token时返回的对象中的refresh_token
 	* @return    
 	* @return WeixinOauth2Token    
 	 */
